@@ -1,33 +1,54 @@
 package flashcards;
 
 public class Main {
-    public static void main(String[] args) {
-         final Scanner scanner = new Scanner(System.in);
+    private static Map<String, String> cards = new LinkedHashMap<>();
+	private static Scanner scanner = new Scanner(System.in);
+	
+	public static void main(final String[] args) {
+	        
+	    System.out.println("Input the number of cards:");
+	    int numberofCards = scanner.nextInt();
+	    createCards(numberofCards);
+	    checkCards();
+	    //System.out.println(cards);
 	    
-	        System.out.println("Input the number of cards:");
-	        int number = scanner.nextInt();
-	        String[] cards = new String[number];
-	        String[] definitions = new String[number];
-	        String answer;
-	        
-	        for (int i = 0; i < number; i++ ) {
-	        	System.out.println("The card #" + (i+1) + ":");
-	        	cards[i] = scanner.next();
-	        	System.out.println("The definition of the card #"+ (i+1)+ ":");
-	        	definitions[i] = scanner.next();
-
-	        }
-	        
-	        for (int i = 0; i < cards.length; i++ ) {
-	        	System.out.println("Print the definition of \"" + cards[i] + "\":");
-	        	answer = scanner.next();
-	        	
-	        	if (answer.equals(definitions[i])) {
-	        		System.out.println("Correct answer.");
-	        	}
-	        	else {
-	        		System.out.println("Wrong answer (the correct one is \""+definitions[i] +"\").");
-	        	}
-	        }  
+	}
+	
+	private static void createCards(int numberOfCards) {
+		String card;
+		String definition;
+		for (int i = 1; i <= numberOfCards; i++) {
+			System.out.println("The card #" + i +":");
+			while (true) {
+				card = scanner.next();
+				if (cards.containsKey(card)) {
+					System.out.println("Such card is exist. Input another card:");
+				}
+				else {
+					System.out.println("The definition of the card #" +  i + ":");
+					definition = scanner.next();
+					cards.put(card, definition);
+					break;
+				}
+			}	
+		}
+	}
+	
+	private static void checkCards() {
+		String answer;
+		for (Map.Entry<String, String> card : cards.entrySet()) {
+			System.out.println("Print the definition of \""+ card.getKey()+"\":");
+			answer = scanner.next();
+			if (answer.equals(card.getValue())) {
+				System.out.println("Correct answer.");
+			}
+			else if (cards.containsValue(answer)) {
+				System.out.println("Wrong answer (The correct one is \""+ card.getValue() +"\"). You've just written a definition of another card.");
+			}
+			else {
+				System.out.println("Wrong answer (The correct one is \""+ card.getValue() +"\").");
+			}
+		}
+	}
     }
 }
